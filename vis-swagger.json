@@ -1,0 +1,2152 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"description": "__Vonage® Integration Suite__ powered by __gUnify&trade;__.\n\n--------------------------------",
+		"version": "v1",
+		"title": "VonageIntegrationSuite",
+		"contact": {
+			"email": "devsupport@vonage.com",
+			"name": "VIS",
+			"url": "https://api.vonage.com"
+		}
+	},
+	"host": "api.vonage.com",
+	"basePath": "/vis/v1",
+	"tags": [
+		{
+			"name": "Users",
+			"description": "Users"
+		},
+		{
+			"name": "Accounts",
+			"description": "Accounts"
+		},
+		{
+			"name": "Calls",
+			"description": "Call Control"
+		},
+		{
+			"name": "Events",
+			"description": "Call Detail Records (CDRs)"
+		},
+		{
+			"name": "Webhooks",
+			"description": "Webhooks are external urls which receive events via Http POST for a certain set of events."
+		}
+	],
+	"schemes": [
+		"https"
+	],
+	"paths": {
+		"/self": {
+			"get": {
+				"summary": "User info",
+				"operationId": "getUser",
+				"tags": [
+					"Users"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/account": {
+			"get": {
+				"summary": "Account info",
+				"operationId": "getAccount",
+				"tags": [
+					"Accounts"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Account"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls": {
+			"post": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Place a call",
+				"operationId": "placeCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Place call parameters",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/CallCreate"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"206": {
+						"description": "Call successfully placed, but did not receive call id from underlying provider.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			},
+			"get": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Get active calls",
+				"description": "Get active calls. For listing not active calls use Events API.",
+				"operationId": "getCalls",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "fromDate",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "toDate",
+						"description": "Default - now",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "direction",
+						"description": "Filter by direction. Default - all",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INBOUND",
+								"OUTBOUND"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "states",
+						"description": "Filter by state. Default - active call states",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INITIALIZING",
+								"RINGING",
+								"ACTIVE",
+								"HELD",
+								"REMOTE_HELD"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"type": "integer",
+						"format": "int64",
+						"description": "Page number (first page = 0)"
+					},
+					{
+						"in": "query",
+						"name": "size",
+						"type": "integer",
+						"format": "int64",
+						"description": "Page size - number of records to return (default 20)"
+					},
+					{
+						"in": "query",
+						"name": "order",
+						"type": "string",
+						"description": "Defalt - descending",
+						"enum": [
+							"DESC",
+							"ASC"
+						]
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"type": "string",
+						"description": "Sort property"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Call"
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/count": {
+			"get": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Get calls count",
+				"operationId": "getCallsCount",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "fromDate",
+						"description": "Default - start of time",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "toDate",
+						"description": "Default - now",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "direction",
+						"description": "Filter by direction. Default - all",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INBOUND",
+								"OUTBOUND"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "states",
+						"description": "Filter by state. Default - active call states",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INITIALIZING",
+								"RINGING",
+								"ACTIVE",
+								"HELD",
+								"REMOTE_HELD"
+							]
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/CallsCount"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/{id}": {
+			"get": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Get a call",
+				"operationId": "getCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			},
+			"delete": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "End a call",
+				"operationId": "endCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/{id}/answer": {
+			"put": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Answer call (On supported devices)",
+				"operationId": "answerCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/{id}/hold": {
+			"put": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Put call on hold",
+				"operationId": "holdCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			},
+			"delete": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Unhold",
+				"operationId": "unholdCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/{id}/vmtransfer": {
+			"put": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Send call to voicemail",
+				"operationId": "transferCallToVoicemail",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/calls/{id}/transfer": {
+			"post": {
+				"tags": [
+					"Calls"
+				],
+				"summary": "Transfer call",
+				"operationId": "transferCall",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Call ID",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Call transfer parameters",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/CallTransfer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Call"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/events": {
+			"get": {
+				"tags": [
+					"Events"
+				],
+				"summary": "List events",
+				"operationId": "getEvents",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "types",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"CALL"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "fromDate",
+						"description": "Default - start of time",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "toDate",
+						"description": "Default - now",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "direction",
+						"description": "Filter by direction. Default - all",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INBOUND",
+								"OUTBOUND"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "states",
+						"description": "Filter by state",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INITIALIZING",
+								"RINGING",
+								"ACTIVE",
+								"HELD",
+								"REMOTE_HELD",
+								"DETACHED",
+								"REJECTED",
+								"CANCELLED",
+								"ANSWERED",
+								"MISSED"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"type": "integer",
+						"format": "int64",
+						"description": "Page number (first page = 0)"
+					},
+					{
+						"in": "query",
+						"name": "size",
+						"type": "integer",
+						"format": "int64",
+						"description": "Page size - number of records to return (default 20)"
+					},
+					{
+						"in": "query",
+						"name": "order",
+						"type": "string",
+						"description": "Default - descending",
+						"enum": [
+							"DESC",
+							"ASC"
+						]
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"type": "string",
+						"description": "Sort property"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Event"
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/events/count": {
+			"get": {
+				"tags": [
+					"Events"
+				],
+				"summary": "Get events count",
+				"operationId": "getEventsCount",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "types",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"CALL"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "fromDate",
+						"description": "Default - start of time",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "toDate",
+						"description": "Default - now",
+						"type": "integer",
+						"format": "date-time"
+					},
+					{
+						"in": "query",
+						"name": "direction",
+						"description": "Filter by direction. Default - all",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INBOUND",
+								"OUTBOUND"
+							]
+						}
+					},
+					{
+						"in": "query",
+						"name": "states",
+						"description": "Filter by state.",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"INITIALIZING",
+								"RINGING",
+								"ACTIVE",
+								"HELD",
+								"REMOTE_HELD",
+								"DETACHED",
+								"REJECTED",
+								"CANCELLED",
+								"ANSWERED",
+								"MISSED"
+							]
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/EventsCount"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/events/{id}": {
+			"get": {
+				"tags": [
+					"Events"
+				],
+				"summary": "Get event",
+				"operationId": "getEvent",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Event ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Event"
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/webhooks": {
+			"post": {
+				"tags": [
+					"Webhooks"
+				],
+				"summary": "Create a new webhook subscription",
+				"operationId": "createWebhook",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Webhook create parameters",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/WebhookCreate"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Webhook"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			},
+			"get": {
+				"tags": [
+					"Webhooks"
+				],
+				"summary": "List web hooks",
+				"operationId": "getWebhooks",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Webhook"
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/webhooks/{id}": {
+			"get": {
+				"tags": [
+					"Webhooks"
+				],
+				"summary": "Get web hook details",
+				"operationId": "getWebhook",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Webhook ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Webhook"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			},
+			"delete": {
+				"tags": [
+					"Webhooks"
+				],
+				"summary": "Remove a web hook",
+				"operationId": "deleteWebhook",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Webhook ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Success."
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		},
+		"/self/webhooks/{id}/renew": {
+			"put": {
+				"tags": [
+					"Webhooks"
+				],
+				"summary": "Renews a web hook",
+				"operationId": "renewWebhook",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Webhook ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success.",
+						"schema": {
+							"$ref": "#/definitions/Webhook"
+						}
+					},
+					"400": {
+						"description": "Bad request. The client SHOULD NOT repeat the request without modifications.",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"401": {
+						"description": "Unauthorized (Invalid access token)."
+					},
+					"403": {
+						"description": "Forbidden. The user has no rights to access the resource(s)."
+					},
+					"408": {
+						"description": "Timeout. The client MAY repeat the request without modifications."
+					},
+					"422": {
+						"description": "Validation error",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponse"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error."
+					},
+					"502": {
+						"description": "Bad Gateway."
+					}
+				},
+				"security": [
+					{
+						"default": []
+					}
+				],
+				"x-auth-type": "Application & Application User",
+				"x-throttling-tier": "Unlimited"
+			}
+		}
+	},
+	"securityDefinitions": {
+		"default": {
+			"type": "oauth2",
+			"authorizationUrl": "https://api.vonage.com/authorize",
+			"tokenUrl": "https://api.vonage.com/token",
+			"flow": "accessCode",
+			"scopes": {
+				"openid": "User unique identifier",
+				"profile": "Profile info"
+			}
+		}
+	},
+	"definitions": {
+		"Field": {
+			"type": "object",
+			"properties": {
+				"field": {
+					"type": "string"
+				},
+				"message": {
+					"type": "string"
+				},
+				"rejectedValue": {
+					"type": "string"
+				}
+			}
+		},
+		"ErrorResponse": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "string"
+				},
+				"message": {
+					"type": "string"
+				},
+				"severity": {
+					"type": "string",
+					"enum": [
+						"ERROR"
+					]
+				},
+				"fields": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Field"
+					}
+				}
+			}
+		},
+		"Event": {
+			"type": "object",
+			"required": [
+				"id",
+				"type",
+				"accountId",
+				"userId",
+				"direction",
+				"state",
+				"phoneNumber"
+			],
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"externalId": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"CALL"
+					]
+				},
+				"accountId": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"uciId": {
+					"type": "string"
+				},
+				"direction": {
+					"type": "string",
+					"enum": [
+						"INBOUND",
+						"OUTBOUND"
+					]
+				},
+				"callerId": {
+					"type": "string",
+					"description": "Remote caller ID (if present)"
+				},
+				"phoneNumber": {
+					"type": "string"
+				},
+				"duration": {
+					"type": "integer",
+					"format": "int64",
+					"description": "Duration in milliseconds"
+				},
+				"internal": {
+					"type": "boolean"
+				},
+				"startTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"answerTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"endTime": {
+					"type": "string",
+					"format": "date-time"
+				}
+			}
+		},
+		"EventsCount": {
+			"type": "object",
+			"properties": {
+				"count": {
+					"type": "integer",
+					"format": "int64"
+				}
+			}
+		},
+		"CallsCount": {
+			"type": "object",
+			"properties": {
+				"count": {
+					"type": "integer",
+					"format": "int64"
+				}
+			}
+		},
+		"Call": {
+			"type": "object",
+			"required": [
+				"id",
+				"type",
+				"accountId",
+				"userId",
+				"direction",
+				"state"
+			],
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"externalId": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"CALL"
+					]
+				},
+				"accountId": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"uciId": {
+					"type": "string"
+				},
+				"direction": {
+					"type": "string",
+					"enum": [
+						"INBOUND",
+						"OUTBOUND"
+					]
+				},
+				"callerId": {
+					"type": "string",
+					"description": "Remote caller ID (if present)"
+				},
+				"phoneNumber": {
+					"type": "string"
+				},
+				"duration": {
+					"type": "integer",
+					"format": "int64",
+					"description": "Duration in milliseconds"
+				},
+				"internal": {
+					"type": "boolean"
+				},
+				"state": {
+					"type": "string",
+					"enum": [
+						"INITIALIZING",
+						"RINGING",
+						"ACTIVE",
+						"HELD",
+						"REMOTE_HELD",
+						"DETACHED",
+						"REJECTED",
+						"CANCELLED",
+						"ANSWERED",
+						"MISSED"
+					]
+				},
+				"startTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"answerTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"endTime": {
+					"type": "string",
+					"format": "date-time"
+				}
+			}
+		},
+		"CallCreate": {
+			"type": "object",
+			"required": [
+				"phoneNumber"
+			],
+			"properties": {
+				"phoneNumber": {
+					"type": "string"
+				}
+			}
+		},
+		"CallTransfer": {
+			"type": "object",
+			"required": [
+				"phoneNumber"
+			],
+			"properties": {
+				"phoneNumber": {
+					"type": "string"
+				}
+			}
+		},
+		"WebhookCreate": {
+			"type": "object",
+			"properties": {
+				"url": {
+					"type": "string"
+				},
+				"events": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"CALL"
+						]
+					}
+				},
+				"signingAlgo": {
+					"type": "string",
+					"enum": [
+						"HMAC_SHA256"
+					]
+				},
+				"signingKey": {
+					"type": "string"
+				},
+				"metadataPolicy": {
+					"type": "string",
+					"enum": [
+						"NONE",
+						"HEADER",
+						"BODY"
+					]
+				}
+			}
+		},
+		"WebhookEventContainer": {
+			"type": "object",
+			"properties": {
+				"event": {
+					"$ref": "#/definitions/WebhookEvent"
+				},
+				"metadata": {
+					"$ref": "#/definitions/WebhookMetaData"
+				}
+			}
+		},
+		"WebhookEvent": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"externalId": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"CALL"
+					]
+				},
+				"accountId": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"direction": {
+					"type": "string",
+					"enum": [
+						"INBOUND",
+						"OUTBOUND"
+					]
+				},
+				"callerId": {
+					"type": "string",
+					"description": "Remote caller ID (if present)"
+				},
+				"phoneNumber": {
+					"type": "string"
+				},
+				"duration": {
+					"type": "integer",
+					"format": "int64",
+					"description": "Duration in milliseconds"
+				},
+				"internal": {
+					"type": "boolean"
+				},
+				"state": {
+					"type": "string",
+					"enum": [
+						"INITIALIZING",
+						"RINGING",
+						"ACTIVE",
+						"HELD",
+						"REMOTE_HELD",
+						"DETACHED",
+						"REJECTED",
+						"CANCELLED",
+						"ANSWERED",
+						"MISSED"
+					]
+				},
+				"startTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"answerTime": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"endTime": {
+					"type": "string",
+					"format": "date-time"
+				}
+			}
+		},
+		"WebhookMetaData": {
+			"type": "object",
+			"properties": {
+				"attempt": {
+					"type": "integer"
+				},
+				"deliveryId": {
+					"type": "string"
+				},
+				"signature": {
+					"type": "string"
+				},
+				"webhookId": {
+					"type": "string"
+				}
+			}
+		},
+		"Webhook": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"accountId": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"status": {
+					"type": "string",
+					"enum": [
+						"ACTIVE",
+						"PAUSED"
+					]
+				},
+				"events": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"CALL"
+						]
+					}
+				},
+				"signingAlgo": {
+					"type": "string",
+					"enum": [
+						"HMAC_SHA256",
+						"NONE"
+					]
+				},
+				"metadataPolicy": {
+					"type": "string",
+					"enum": [
+						"NONE",
+						"HEADER",
+						"BODY"
+					]
+				},
+				"expireAt": {
+					"type": "string"
+				},
+				"createdAt": {
+					"type": "string"
+				},
+				"renewedAt": {
+					"type": "string"
+				},
+				"purgeAt": {
+					"type": "string"
+				},
+				"signingKey": {
+					"type": "string"
+				},
+				"statistics": {
+					"type": "object",
+					"properties": {
+						"totalAttempts": {
+							"type": "integer"
+						},
+						"totalSuccesses": {
+							"type": "integer"
+						},
+						"totalFailures": {
+							"type": "integer"
+						},
+						"failed": {
+							"type": "boolean"
+						},
+						"lastSuccess": {
+							"type": "string"
+						},
+						"lastFailure": {
+							"type": "string"
+						},
+						"lastHttpErrorCode": {
+							"type": "string"
+						},
+						"lastErrorMessage": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"User": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"accountId": {
+					"type": "string"
+				},
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
+					"type": "string"
+				},
+				"emailAddress": {
+					"type": "string"
+				},
+				"contactNumber": {
+					"type": "string"
+				},
+                                "status": {
+                                        "type": "string",
+                                        "enum": [
+                                                "PENDING",
+                                                "ACTIVE",
+                                                "INACTIVE",
+                                                "DELETED",
+                                                "ARCHIVED"
+                                        ]
+                                },
+				"roles": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"code": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"ucis": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"ucpLabel": {
+								"type": "string",
+								"description": "Display name."
+							},
+							"ucpUserId": {
+								"type": "string"
+							},
+							"ucpUserName": {
+								"type": "string"
+							},
+							"health": {
+								"type": "object",
+								"properties": {
+									"status": {
+										"type": "string"
+									},
+									"message": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"Account": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"format": "int64"
+				},
+				"name": {
+					"type": "string"
+				},
+				"org": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
